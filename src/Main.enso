@@ -1,0 +1,198 @@
+# from Project import <NAMES>
+# from Base.Network.Http import Header # unqualified import of `Header`
+# import Base.Network.Http # qualified import of `Http`
+# from Base import all – `all` means all
+from Base import all
+
+
+## the `main` method is the program entry point
+main =
+    # assignments – run the right-hand side and store the result in `operator1`
+    operator1 = 0.up_to 100 . to_vector . map .noise
+    # single-assignment! Can't modify an existing variable
+    # operator1 = 1 – reports a compile error now!
+
+    # Method calls – `.` calls method `sort` of `operator1`
+    # We can pass additional arguments
+    operator1.sort Ascending
+
+    # Operators have different precedence depending on spacing
+    # No-spaces binds stronger than a spaced version
+    # foo bar . baz ==> (foo bar).baz
+    # foo bar.baz   ==> foo (bar.baz)
+    operator1 = 0.up_to 100 . to_vector . map .noise
+
+    # Operator sections!
+    # (+ 5) => a function that takes x and returns x+5
+    # (5 +) => ...
+    # [1, 2, 3] . map (+ 5)
+    # [1, 2, 3] . map +5
+    # .noise => a function that takes x and return x.noise
+    operator1.sort
+
+    # Lambdas
+    # Created with `->`
+    # Arguments go on the left, result goes on the right
+    [1, 2, 3] . map (x -> x * 5)
+    [1, 2, 3] . map z-> y-> x->
+        y_1 = x * 5
+        z_1 = y_1 + 3
+        z_1
+    [1, 2, 3] . reduce (x -> y -> x + y)
+
+    # Lambda shorthands
+    my_lambda = (here.my_method _ 5) # equivalent to (x-> here.my_method x 5)
+    my_lambda_2 = (here.my_method _ 6 _ 5) # equivalent to (y-> x-> here.my_method y 6 x 5)
+
+    # Calling a method
+    this.my_method 1 2 # `this` refers to whatever the current method is called on
+    here.my_method 1 2 # `here` ALWAYS refers to the current module
+
+    # Calling a method with default arguments, by name
+    my_circ_1 = here.draw_circle x_position=37 radius=7 # equivalent to here.draw_circle 7 'red' 37 0
+    my_circ_2 = here.draw_circle 36 'blue' # equivalent to here.draw_circle 36 'blue' 0 0
+    my_circ_factory = here.draw_circle 36 'blue' ... # equivalent to (x=0)-> (y=0)-> here.draw_circle 36 'blue' x y
+
+my_method arg1 arg2 =
+    IO.println arg1
+    IO.println arg2
+    # The last line in a block of code is the return value
+    arg1 + arg2
+
+draw_circle radius=1.0 color='red' x_position=0 y_position=0 =
+    ...
+
+
+## Type definitions
+type Geo_Point latitude longitude
+
+## Type definitions
+type Geo_Point latitude longitude shape='star'
+
+## Defines a method on an Atom (a defined type)
+Geo_Point.convert =
+    result = Geo_Point (this.latitude / 3600000) (this.longitude / 3600000) # `this` refers to the `Geo_Point` object
+    here.my_method result.latitude result.longitude # `here` still refers to the current module
+    result
+
+test_types =
+    # Create a Geo_Point
+    my_point = Geo_Point 52.05 15.2
+    # getters!
+    my_latitude = my_point.latitude
+    my_longitude = my_point.longitude
+    # Pattern matching:
+    my_number = case my_point of
+        Geo_Point ltd lng -> ltd * lng
+    # Calling a method on a value
+    my_point.convert
+
+# Polyglot Java
+polyglot java import com.example.MyClass
+
+poly_test =
+    # Call a static method
+    result = MyClass.staticMethod [arg1, arg2] # Today
+    result = MyClass.staticMethod arg1 arg2 # A week from now
+    # Create an instance! (call a constructor)
+    my_inst = MyClass.new [arg1, arg2].to_array # Today
+    my_inst = MyClass.new arg1 arg2 # A week from now
+    # Call an instance method
+    my_inst.myMethod [1, 2, 3] # Today
+    my_inst.myMethod 1 2 3 # Future
+
+# Polyglot (R | Python | Ruby | JS | Whatever the Truffle team implements next!)
+
+foreign r my_function arg1 arg2 = """
+    library(lattice)
+    print(histogram(arg1 ~ arg2))
+
+foreign js mk_object arg1 arg2 = """
+    {foo: arg1, bar: arg2}
+
+poly_test_2 =
+    # Call just like Enso, everything is curried.
+    here.my_function 1 2
+    here.mk_object 3 4
+
+## Built-in data types
+data_types =
+    integer = 6
+    decimal = 78.23
+
+    text_sample = "this \n is my text"
+    text_sample_2 = 'this \n is my text'
+    text_block = '''
+        My text
+        can have multiple
+            lines
+        now
+    # `+` on texts is actually fast an preferred
+    concat = text_sample + text_block
+    characters = text.characters
+
+    # Booleans
+    my_true = True
+    my_false = False
+    True && False
+    True || False
+    True.not
+
+    if my_condition then do_something 1 else do_a_different_thing 2
+
+    my_bool = 1 == 2
+    my_bool = 2 > 0.3
+    my_bool = "foo" == "bar"
+
+    # Vectors
+    # create with []
+    my_vec = [1, 2, 3]
+    my_vec_2 = [1, "Foo", False]
+    text.characters # this is also a vector
+    1.up_to 100 . to_vector # [1, 2, ..., 99]
+
+    # Maps
+
+    empty_map = Map.empty
+
+    inserted = empty_map.insert 4 "foo" . insert 5 False
+
+    item = inserted.get 4 # returns "foo"
+    item_2 = inserted.get 10 # returns Nothing (this week) or a Dataflow Error (starting next week)
+
+
+
+## Dataflow Errors (all of this next week)
+errors =
+    foo = Error.throw "foo" # Creates a dataflow error
+
+    foo.my_method # returns foo
+
+    match_result = case foo of
+        Nothing -> True
+        True -> False
+        False -> Nothing
+    # match_result is foo again!
+
+    foo + 5 # foo again!
+
+    save_us_all = foo.catch error_value->
+        error_value + " we're safe now!"
+    # save_us_all is "foo we're safe now!"
+
+    y = 10.catch x-> x + 5
+    # y is 10, .catch is no-op
+
+    Panic.throw "HEEEELP!"
+
+    Panic.recover (here.my_method) # if here.my_method throws a panic, this results in a dataflow error
+
+type One_Or_Another
+    type One value
+    type Another value_x value_y
+
+    my_method v = case this of
+        One False -> v || value
+        One True -> v && value
+        Another vx vy -> v * vx * vy
+
