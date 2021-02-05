@@ -45,22 +45,22 @@ main =
     # `up_to` creates a `Range` from 1 up to 10.
     range = x.up_to y
 
-    # Operators, including `.`, have different precedence depending on spacing
-    # No-spaces binds stronger than a spaced version
-    # foo bar . baz ==> (foo bar).baz
-    # foo bar.baz   ==> foo (bar.baz)
-    result_2 = 2+2 * 2 # (2+2)*2 == 8
-    result_3 = 2 + 2 * 2 # 6, conventional aritmetic operator
-    mapped_list = range . to_vector . map +5
-    # equivalent to:
-    # mapped_list = (range.to_vector).map +5
-
     # Operator sections:
     # (+ 5) => a function that takes x and returns x+5
     # (5 +) => a function that takes x and returns 5+x
     # [1, 2, 3] . map (+ 5)
     # [1, 2, 3] . map +5
     # .noise => a function that takes x and return x.noise
+
+    # Operators, including `.`, have different precedence depending on spacing
+    # No-spaces binds stronger than a spaced version
+    # foo bar . baz ==> (foo bar).baz
+    # foo bar.baz   ==> foo (bar.baz)
+    result_2 = 2+2 * 2 # (2+2)*2 == 8
+    result_3 = 2 + 2 * 2 # 6, conventional aritmetic operator
+    mapped_list = range . to_vector . map .noise
+    # equivalent to:
+    # mapped_list = (range.to_vector).map .noise
 
     # Lambdas / anonymous functions
     # Created with `->`
@@ -77,10 +77,10 @@ main =
     here.sum 1 2 # `here` ALWAYS refers to the current module
 
     # Methods with default parameters can be called
-    result_3 = here.product x=20 y=100 # equivalent to product 20 100
-    result_4 = here.product x=20 # equivalent to product 20 2
-    result_5 = here.product 20 # equivalent to product 20 2
-    result_6 = here.product 20 ... # returns a function expecting a parameter for y
+    result_5 = here.product x=20 y=100 # equivalent to product 20 100
+    result_6 = here.product x=20 # equivalent to product 20 2
+    result_7 = here.product 20 # equivalent to product 20 2
+    result_8 = here.product 20 ... # returns a function expecting a parameter for y
 
     # The last line in a block of code is the return value
     here.sum 1 99 # main returns 100
@@ -113,8 +113,8 @@ data_types =
     True.not
 
     my_bool = 1 == 2
-    my_bool = 2 > 0.3
-    my_bool = "foo" == "bar"
+    my_bool_2 = 2 > 0.3
+    my_bool_3 = "foo" == "bar"
 
     # Vectors:
     # Create with []
@@ -122,16 +122,16 @@ data_types =
     # Vectors can contain multiple types:
     my_vec_2 = [1, "Foo", False]
     # `characters` is a method that creates a vector of characters in text.
-    text_sample.characters 
+    text_sample.characters
 
     # Maps
     # Key:value data structure.
 
     empty_map = Map.empty
 
-    inserted = empty_map.insert 4 "foo" 
+    inserted = empty_map.insert 4 "foo"
     item = inserted.get 4 # returns "foo"
-    item_2 = inserted.get 10 # returns Dataflow Error 
+    item_2 = inserted.get 10 # returns Dataflow Error
 
 # Type definition
 # Types are defined with the `type` keyword,
@@ -139,7 +139,7 @@ data_types =
 type Geo_Point latitude longitude
 
 # Types can also be defined with default values for fields.
-type Geo_Point latitude longitude shape='star'
+type Geo_Point_2 latitude longitude shape='star'
 
 # Methods can be defined as Extension Methods, on an existing type (an Atom).
 Geo_Point.convert =
@@ -167,8 +167,8 @@ type One_Or_Another
     type Another value_x value_y
 
     my_method v = case this of
-        One False -> v || value
-        One True -> v && value
+        One False -> v || False
+        One True -> v && True
         Another vx vy -> v * vx * vy
 
 # Polyglot: language interoperation
