@@ -3,7 +3,7 @@
 ##  Documentation comments start with two hashes,and are block indented.
     The block ends when the block indentation returns to the baseline indentation. 
 
-## Imports
+# Imports
 # Most Enso files will want to start with importing the standard library.
 # An unqualified import declaration, importing everything from the Base module.
 from Base import all
@@ -14,7 +14,7 @@ from Base import all
 # Qualified imports bring only the module name into
 # import Base.Network.Http 
 
-## Assignments
+# Assignments
 # `=` for assignments, storing the result of the right-hand side under
 # the name on the left.
 x = 1
@@ -24,7 +24,7 @@ result = x + y
 # Enso has single assignments: you cannot modify existing variable.
 # x = 2 now will result in a compile error.
 
-## Functions & Methods
+# Functions & Methods
 # Declare functions with a name,
 # followed by a space separated list of parameters.
 sum a b = a + b
@@ -89,7 +89,7 @@ main =
     # The last line in a block of code is the return value
     IO.println here.sum 1 99
 
-## Built-in data types
+# Built-in data types
 data_types =
     # Numbers
     integer = 6
@@ -137,7 +137,7 @@ data_types =
     item = inserted.get 4 # returns "foo"
     item_2 = inserted.get 10 # returns Dataflow Error 
 
-## Type definition
+# Type definition
 # Types are defined with the `type` keyword,
 # followed by a type name and fields.
 type Geo_Point latitude longitude
@@ -176,7 +176,7 @@ type One_Or_Another
         One True -> v && value
         Another vx vy -> v * vx * vy
 
-## Polyglot: language interoperation
+# Polyglot: language interoperation
 
 # Java interoperability
 polyglot java import com.example.MyClass
@@ -203,7 +203,7 @@ poly_test_2 =
     here.my_function 1 2
     here.mk_object 3 4
 
-## Dataflow Errors 
+# Dataflow Errors 
 # Dataflow errors create a special 
 errors =
     # Create a dataflow error:
