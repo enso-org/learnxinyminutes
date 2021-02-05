@@ -202,12 +202,11 @@ poly_test_2 =
     here.mk_object 3 4
 
 # Dataflow Errors 
-# Dataflow errors create a special 
 errors =
     # Create a dataflow error:
     foo = Error.throw "foo" 
 
-    # Returns "foo":
+    # Returns "foo" unmodified, without calling `my_method`. 
     foo.my_method 
 
     # Match result is "foo" again:
@@ -220,8 +219,8 @@ errors =
     foo + 5 
 
     # Errors can be caught with `.catch`:
-    save_us_all = foo.catch error_value->
-        error_value + " we're safe now!"
+    caught_error = foo.catch error_value->
+        "Error: " + error_value
 
     # y is 10, as there is no error so `.catch` is a no-op:
     y = 10.catch x-> x + 5
