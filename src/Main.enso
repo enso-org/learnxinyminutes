@@ -11,46 +11,39 @@ from Base import all
 # Unqualified imports can also be restricted
 # from Base.Network.Http import Header
 
-# Qualified imports bring only the module name into
+# Qualified imports bring only the module name into the scope
 # import Base.Network.Http 
-
-# Assignments
-# `=` for assignments, storing the result of the right-hand side under
-# the name on the left.
-x = 1
-y = 10
-result = x + y
-
-# Enso has single assignments: you cannot modify existing variable.
-# x = 2 now will result in a compile error.
 
 # Functions & Methods
 # Declare functions with a name,
 # followed by a space separated list of parameters.
 sum a b = a + b
-result2 = sum x y
 
 # When declared in the top-level, functions are methods of the current module.
 # Methods can be called with `.`, and `here` refers to the current module.
 # `sum` is a method of the current module, so can be called on `here`.
-result3 = here.sum 1 2
+result = here.sum 1 2
 # Methods can also be declared on a type, see Type Definition below.
 
-# Functions can be declared with default values for parameters.
+# Methods can be declared with default values for parameters.
 product x=1 y=2 = x * y
-
-# They can then be called with default arguments by name
-result3 = product x=20 y=100 # equivalent to product 20 100
-result4 = product x=20 # equivalent to product 20 2
-result5 = product 20 # equivalent to product 20 2
-result6 = product 20 ... # returns a function expecting a parameter for y
 
 # The entry point for an Enso program is a method `main` in `Main.enso`.
 main =
+
+    # Assignments
+    # `=` for assignments, storing the result of the right-hand side under
+    # the name on the left.
+    x = 1
+    y = 10
+
+    # Enso has single assignments: you cannot modify existing variable.
+    # x = 2 now will result in a compile error.
+
     # Methods can be called with `.`.
     # Methods can be passed additional arguments.
     # `up_to` creates a `Range` from 1 up to 10.
-    range = 1.up_to 10
+    range = x.up_to y
 
     # Operators, including `.`, have different precedence depending on spacing
     # No-spaces binds stronger than a spaced version
@@ -85,6 +78,12 @@ main =
     # Calling a method
     this.sum 1 2 # `this` refers to whatever the current method is called on
     here.sum 1 2 # `here` ALWAYS refers to the current module
+
+    # Methods with default parameters can be called
+    result_3 = here.product x=20 y=100 # equivalent to product 20 100
+    result_4 = here.product x=20 # equivalent to product 20 2
+    result_5 = here.product 20 # equivalent to product 20 2
+    result_6 = here.product 20 ... # returns a function expecting a parameter for y
 
     # The last line in a block of code is the return value
     IO.println here.sum 1 99
@@ -165,8 +164,7 @@ test_types =
     # Calling a method on a value
     my_point.convert
 
-# Types can be nested and combined with pattern matching to provide
-# Option-like types.
+# Types can be nested and combined with pattern matching to create sum types.
 type One_Or_Another
     type One value
     type Another value_x value_y
@@ -189,7 +187,7 @@ poly_test =
     # Call an instance method
     my_inst.myMethod 1 2 3 
 
-# Polyglot (R | Python | Ruby | JS | Whatever the Truffle team implements next!)
+# Polyglot (R | Python | Ruby | JS | Stay tuned for more!)
 
 foreign r my_function arg1 arg2 = """
     library(lattice)
