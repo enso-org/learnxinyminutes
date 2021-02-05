@@ -49,6 +49,7 @@ main =
     # No-spaces binds stronger than a spaced version
     # foo bar . baz ==> (foo bar).baz
     # foo bar.baz   ==> foo (bar.baz)
+    result_2 = 2+2 * 2 # (2+2)*2 == 8
     sorted_list = range . to_vector . sort Ascending
     # equivalent to:
     # sorted_list = (range.to_vector).sort Ascending
