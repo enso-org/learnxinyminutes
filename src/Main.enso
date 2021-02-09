@@ -1,6 +1,6 @@
 # Single line comments start with a hash.
 
-##  Documentation comments start with two hashes,and are block indented.
+##  Documentation comments start with two hashes, and are block indented.
     The block ends when the block indentation returns to the baseline indentation. 
 
 # Imports
