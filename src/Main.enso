@@ -125,7 +125,7 @@ data_types =
     text_sample.characters
 
     # Maps
-    # Key:value data structure.
+    # key:value data structure.
 
     empty_map = Map.empty
 
