@@ -76,7 +76,7 @@ main =
     this.sum 1 2 # `this` refers to whatever the current method is called on
     here.sum 1 2 # `here` ALWAYS refers to the current module
 
-    # Methods with default parameters can be called
+    # Defaulted parameters can be omitted when calling methods.
     result_5 = here.product x=20 y=100 # equivalent to product 20 100
     result_6 = here.product x=20 # equivalent to product 20 2
     result_7 = here.product 20 # equivalent to product 20 2
