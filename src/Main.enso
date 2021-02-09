@@ -16,7 +16,7 @@ from Base import all
 
 # Functions & Methods
 # Declare functions with a name,
-# followed by a space separated list of parameters.
+# followed by a space-separated list of parameters.
 sum a b = a + b
 
 # When declared in the top-level, functions are methods of the current module.
