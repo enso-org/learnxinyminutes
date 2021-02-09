@@ -185,7 +185,7 @@ poly_test =
     # Call an instance method
     my_inst.append "more text"
 
-# Polyglot (R | Python | Ruby | JS | Stay tuned for more!)
+# Polyglot (JS | More languages, like Python and R, coming soon)
 
 foreign r my_function arg1 arg2 = """
     library(lattice)
