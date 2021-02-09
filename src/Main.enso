@@ -174,15 +174,16 @@ type One_Or_Another
 # Polyglot: language interoperation
 
 # Java interoperability
-polyglot java import com.example.MyClass
+polyglot java import java.lang.Long
+polyglot java import java.lang.StringBuilder
 
 poly_test =
     # Call a static method
-    result = MyClass.staticMethod arg1 arg2
+    result = Long.add 1 2
     # Create an instance! (call a constructor)
-    my_inst = MyClass.new arg1 arg2 
+    my_inst = StringBuilder.new "initial text"
     # Call an instance method
-    my_inst.myMethod 1 2 3 
+    my_inst.append "more text"
 
 # Polyglot (R | Python | Ruby | JS | Stay tuned for more!)
 
@@ -226,4 +227,4 @@ errors =
     Panic.throw "HEEEELP!"
 
     # A Panic can be recovered, resulting in a Dataflow error.
-    Panic.recover (here.my_method) 
+    Panic.recover (here.my_method)
