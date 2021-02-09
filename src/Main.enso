@@ -1,107 +1,191 @@
-# from Project import <NAMES>
-# from Base.Network.Http import Header # unqualified import of `Header`
-# import Base.Network.Http # qualified import of `Http`
-# from Base import all – `all` means all
+# Single line comments start with a hash.
+
+##  Documentation comments start with two hashes, and are block indented.
+    The block ends when the block indentation returns to the baseline indentation. 
+
+# Imports
+# Most Enso files will want to start with importing the standard library.
+# An unqualified import declaration, importing everything from the Base module.
 from Base import all
 
+# Unqualified imports can also be restricted
+# from Base.Network.Http import Header
 
-## the `main` method is the program entry point
+# Qualified imports bring only the module name into the scope
+# import Base.Network.Http 
+
+# Functions & Methods
+# Declare functions with a name,
+# followed by a space-separated list of parameters.
+sum a b = a + b
+
+# When declared in the top-level, functions are methods of the current module.
+# Methods can be called with `.`, and `here` refers to the current module.
+# `sum` is a method of the current module, so can be called on `here`.
+result = here.sum 1 2
+# Methods can also be declared on a type, see Type Definition below.
+
+# Methods can be declared with default values for parameters.
+product x=1 y=2 = x * y
+
+# The entry point for an Enso program is a method `main` in `Main.enso`.
 main =
-    # assignments – run the right-hand side and store the result in `operator1`
-    operator1 = 0.up_to 100 . to_vector . map .noise
-    # single-assignment! Can't modify an existing variable
-    # operator1 = 1 – reports a compile error now!
 
-    # Method calls – `.` calls method `sort` of `operator1`
-    # We can pass additional arguments
-    operator1.sort Ascending
+    # Assignments
+    # `=` for assignments, storing the result of the right-hand side under
+    # the name on the left.
+    x = 1
+    y = 10
 
-    # Operators have different precedence depending on spacing
-    # No-spaces binds stronger than a spaced version
-    # foo bar . baz ==> (foo bar).baz
-    # foo bar.baz   ==> foo (bar.baz)
-    operator1 = 0.up_to 100 . to_vector . map .noise
+    # Enso has single assignments: you cannot modify existing variable.
+    # x = 2 now will result in a compile error.
 
-    # Operator sections!
+    # Methods can be called with `.`.
+    # Methods can be passed additional arguments.
+    # `up_to` creates a `Range` from 1 up to 10.
+    range = x.up_to y
+
+    # Operator sections:
     # (+ 5) => a function that takes x and returns x+5
-    # (5 +) => ...
+    # (5 +) => a function that takes x and returns 5+x
     # [1, 2, 3] . map (+ 5)
     # [1, 2, 3] . map +5
     # .noise => a function that takes x and return x.noise
-    operator1.sort
 
-    # Lambdas
+    # Operators, including `.`, have different precedence depending on spacing
+    # No-spaces binds stronger than a spaced version
+    # foo bar . baz ==> (foo bar).baz
+    # foo bar.baz   ==> foo (bar.baz)
+    result_2 = 2+2 * 2 # (2+2)*2 == 8
+    result_3 = 2 + 2 * 2 # 6, conventional aritmetic operator
+    mapped_list = range . to_vector . map .noise
+    # equivalent to:
+    # mapped_list = (range.to_vector).map .noise
+
+    # Lambdas / anonymous functions
     # Created with `->`
-    # Arguments go on the left, result goes on the right
+    # Parameters on the left, results on the right:
     [1, 2, 3] . map (x -> x * 5)
-    [1, 2, 3] . map z-> y-> x->
-        y_1 = x * 5
-        z_1 = y_1 + 3
-        z_1
+    # Multiple parameters are achieved by multiple `->`:
     [1, 2, 3] . reduce (x -> y -> x + y)
 
     # Lambda shorthands
-    my_lambda = (here.my_method _ 5) # equivalent to (x-> here.my_method x 5)
-    my_lambda_2 = (here.my_method _ 6 _ 5) # equivalent to (y-> x-> here.my_method y 6 x 5)
+    my_lambda = (here.sum _ 5) # equivalent to (x-> here.sum x 5)
 
     # Calling a method
-    this.my_method 1 2 # `this` refers to whatever the current method is called on
-    here.my_method 1 2 # `here` ALWAYS refers to the current module
+    this.sum 1 2 # `this` refers to whatever the current method is called on
+    here.sum 1 2 # `here` ALWAYS refers to the current module
 
-    # Calling a method with default arguments, by name
-    my_circ_1 = here.draw_circle x_position=37 radius=7 # equivalent to here.draw_circle 7 'red' 37 0
-    my_circ_2 = here.draw_circle 36 'blue' # equivalent to here.draw_circle 36 'blue' 0 0
-    my_circ_factory = here.draw_circle 36 'blue' ... # equivalent to (x=0)-> (y=0)-> here.draw_circle 36 'blue' x y
+    # Defaulted parameters can be omitted when calling methods.
+    result_5 = here.product x=20 y=100 # equivalent to product 20 100
+    result_6 = here.product x=20 # equivalent to product 20 2
+    result_7 = here.product 20 # equivalent to product 20 2
+    result_8 = here.product 20 ... # returns a function expecting a parameter for y
 
-my_method arg1 arg2 =
-    IO.println arg1
-    IO.println arg2
     # The last line in a block of code is the return value
-    arg1 + arg2
+    here.sum 1 99 # main returns 100
 
-draw_circle radius=1.0 color='red' x_position=0 y_position=0 =
-    ...
+# Built-in data types
+data_types =
+    # Numbers
+    integer = 6
+    decimal = 78.23
 
+    # Text
+    text_sample = "this \n is my text"
+    text_sample_2 = 'this \n is my text'
+    text_block = '''
+        My text
+        can have multiple
+            lines
+        now
+    # `+` concatenates text
+    concat = text_sample + text_block
 
-## Type definitions
+    # Booleans
+    my_true = True
+    my_false = False
+
+    # Boolean logic operators
+
+    True && False
+    True || False
+    True.not
+
+    my_bool = 1 == 2
+    my_bool_2 = 2 > 0.3
+    my_bool_3 = "foo" == "bar"
+
+    # Vectors:
+    # Create with []
+    my_vec = [1, 2, 3]
+    # Vectors can contain multiple types:
+    my_vec_2 = [1, "Foo", False]
+    # `characters` is a method that creates a vector of characters in text.
+    text_sample.characters
+
+    # Maps
+    # key:value data structure.
+
+    empty_map = Map.empty
+
+    inserted = empty_map.insert 4 "foo"
+    item = inserted.get 4 # returns "foo"
+    item_2 = inserted.get 10 # returns Dataflow Error
+
+# Type definition
+# Types are defined with the `type` keyword,
+# followed by a type name and fields.
 type Geo_Point latitude longitude
 
-## Type definitions
-type Geo_Point latitude longitude shape='star'
+# Types can also be defined with default values for fields.
+type Geo_Point_2 latitude longitude shape='star'
 
-## Defines a method on an Atom (a defined type)
+# Methods can be defined as Extension Methods, on an existing type (an Atom).
 Geo_Point.convert =
-    result = Geo_Point (this.latitude / 3600000) (this.longitude / 3600000) # `this` refers to the `Geo_Point` object
-    here.my_method result.latitude result.longitude # `here` still refers to the current module
+    # `this` refers to the `Geo_Point` object
+    result = Geo_Point (this.latitude / 3600000) (this.longitude / 3600000)
+    # `here` still refers to the current module
+    here.my_method result.latitude result.longitude
     result
 
 test_types =
-    # Create a Geo_Point
+    # Create a Geo_Point:
     my_point = Geo_Point 52.05 15.2
-    # getters!
+    # Fields can be used as getters:
     my_latitude = my_point.latitude
     my_longitude = my_point.longitude
-    # Pattern matching:
+    # Pattern matching on fields:
     my_number = case my_point of
         Geo_Point ltd lng -> ltd * lng
     # Calling a method on a value
     my_point.convert
 
-# Polyglot Java
-polyglot java import com.example.MyClass
+# Types can be nested and combined with pattern matching to create sum types.
+type One_Or_Another
+    type One value
+    type Another value_x value_y
+
+    my_method v = case this of
+        One False -> v || False
+        One True -> v && True
+        Another vx vy -> v * vx * vy
+
+# Polyglot: language interoperation
+
+# Java interoperability
+polyglot java import java.lang.Long
+polyglot java import java.lang.StringBuilder
 
 poly_test =
     # Call a static method
-    result = MyClass.staticMethod [arg1, arg2] # Today
-    result = MyClass.staticMethod arg1 arg2 # A week from now
+    result = Long.add 1 2
     # Create an instance! (call a constructor)
-    my_inst = MyClass.new [arg1, arg2].to_array # Today
-    my_inst = MyClass.new arg1 arg2 # A week from now
+    my_inst = StringBuilder.new "initial text"
     # Call an instance method
-    my_inst.myMethod [1, 2, 3] # Today
-    my_inst.myMethod 1 2 3 # Future
+    my_inst.append "more text"
 
-# Polyglot (R | Python | Ruby | JS | Whatever the Truffle team implements next!)
+# Polyglot (JS | More languages, like Python and R, coming soon)
 
 foreign r my_function arg1 arg2 = """
     library(lattice)
@@ -115,84 +199,32 @@ poly_test_2 =
     here.my_function 1 2
     here.mk_object 3 4
 
-## Built-in data types
-data_types =
-    integer = 6
-    decimal = 78.23
-
-    text_sample = "this \n is my text"
-    text_sample_2 = 'this \n is my text'
-    text_block = '''
-        My text
-        can have multiple
-            lines
-        now
-    # `+` on texts is actually fast an preferred
-    concat = text_sample + text_block
-    characters = text.characters
-
-    # Booleans
-    my_true = True
-    my_false = False
-    True && False
-    True || False
-    True.not
-
-    if my_condition then do_something 1 else do_a_different_thing 2
-
-    my_bool = 1 == 2
-    my_bool = 2 > 0.3
-    my_bool = "foo" == "bar"
-
-    # Vectors
-    # create with []
-    my_vec = [1, 2, 3]
-    my_vec_2 = [1, "Foo", False]
-    text.characters # this is also a vector
-    1.up_to 100 . to_vector # [1, 2, ..., 99]
-
-    # Maps
-
-    empty_map = Map.empty
-
-    inserted = empty_map.insert 4 "foo" . insert 5 False
-
-    item = inserted.get 4 # returns "foo"
-    item_2 = inserted.get 10 # returns Nothing (this week) or a Dataflow Error (starting next week)
-
-
-
-## Dataflow Errors (all of this next week)
+# Dataflow Errors 
 errors =
-    foo = Error.throw "foo" # Creates a dataflow error
+    # Create a dataflow error:
+    foo = Error.throw "foo" 
 
-    foo.my_method # returns foo
+    # Returns "foo" unmodified, without calling `my_method`. 
+    foo.my_method 
 
+    # Match result is "foo" again:
     match_result = case foo of
         Nothing -> True
         True -> False
         False -> Nothing
-    # match_result is foo again!
 
-    foo + 5 # foo again!
+    # We just can't escape "foo":
+    foo + 5 
 
-    save_us_all = foo.catch error_value->
-        error_value + " we're safe now!"
-    # save_us_all is "foo we're safe now!"
+    # Errors can be caught with `.catch`:
+    caught_error = foo.catch error_value->
+        "Error: " + error_value
 
+    # y is 10, as there is no error so `.catch` is a no-op:
     y = 10.catch x-> x + 5
-    # y is 10, .catch is no-op
 
+    # Something very bad and probably irrecoverable has happened.
     Panic.throw "HEEEELP!"
 
-    Panic.recover (here.my_method) # if here.my_method throws a panic, this results in a dataflow error
-
-type One_Or_Another
-    type One value
-    type Another value_x value_y
-
-    my_method v = case this of
-        One False -> v || value
-        One True -> v && value
-        Another vx vy -> v * vx * vy
-
+    # A Panic can be recovered, resulting in a Dataflow error.
+    Panic.recover (here.my_method)
